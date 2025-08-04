@@ -40,6 +40,10 @@ window.onload = function() {
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+    // Ensure player is centered and angle is set on load
+    player.x = getCenterX();
+    player.y = getCenterY();
+    player.angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
 
     // Center and radius depend on canvas size
     function getCenterX() { return canvas.width / 2; }
@@ -489,9 +493,16 @@ window.onload = function() {
                 projectiles = [];
                 enemies = [];
                 particles = [];
+                // Force resize/player centering
+                resizeCanvas();
+                player.x = getCenterX();
+                player.y = getCenterY();
+                player.angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
                 // Restart enemy spawn and animation loop
                 startEnemySpawn();
                 running = true;
+                // Draw first frame instantly
+                draw();
                 requestAnimationFrame(loop);
             }
             return;
@@ -510,10 +521,10 @@ window.onload = function() {
     // Use a flag to prevent multiple rapid touches from freezing the game
     let lastTouch = 0;
     canvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
         const now = Date.now();
         if (now - lastTouch < 80) return; // throttle touch events
         lastTouch = now;
-        e.preventDefault();
         const pos = getEventPos(e);
         // Update mouse and player angle
         mouse = pos;
@@ -537,9 +548,16 @@ window.onload = function() {
                 projectiles = [];
                 enemies = [];
                 particles = [];
+                // Force resize/player centering
+                resizeCanvas();
+                player.x = getCenterX();
+                player.y = getCenterY();
+                player.angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
                 // Restart enemy spawn and animation loop
                 startEnemySpawn();
                 running = true;
+                // Draw first frame instantly
+                draw();
                 requestAnimationFrame(loop);
             }
             return;
