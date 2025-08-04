@@ -18,13 +18,25 @@ window.onload = function() {
     }
     // Start screen state
     let gameStarted = false;
-    // ...existing code...
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    // Player state
+    let player = {
+        x: 0,
+        y: 0,
+        r: 32,
+        angle: 0 // direction the triangle points (radians)
+    };
+    // Mouse/touch position for aiming
+    let mouse = { x: 0, y: 0 };
     // Responsive canvas sizing
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        // Center player and update angle
+        player.x = getCenterX();
+        player.y = getCenterY();
+        player.angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
@@ -155,11 +167,21 @@ window.onload = function() {
             ctx.restore();
             return;
         }
-        // Draw center circle
+        // Draw player as a triangle pointing towards player.angle
+        ctx.save();
+        ctx.translate(player.x, player.y);
+        ctx.rotate(player.angle);
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        // Triangle: tip at (r,0), base at (-r/1.5, -r/1.5) and (-r/1.5, r/1.5)
+        ctx.moveTo(player.r, 0);
+        ctx.lineTo(-player.r / 1.5, -player.r / 1.5);
+        ctx.lineTo(-player.r / 1.5, player.r / 1.5);
+        ctx.closePath();
         ctx.fillStyle = '#fff';
+        ctx.shadowColor = '#ffd700';
+        ctx.shadowBlur = 16;
         ctx.fill();
+        ctx.restore();
         // Draw score (top left)
         ctx.font = '24px Arial';
         ctx.fillStyle = '#fff';
@@ -445,6 +467,9 @@ window.onload = function() {
     // Mouse click event to shoot projectile
     canvas.addEventListener('mousedown', function(e) {
         const pos = getEventPos(e);
+        // Update mouse and player angle
+        mouse = pos;
+        player.angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
         const centerX = getCenterX();
         const centerY = getCenterY();
         if (!gameStarted) {
@@ -490,6 +515,9 @@ window.onload = function() {
         lastTouch = now;
         e.preventDefault();
         const pos = getEventPos(e);
+        // Update mouse and player angle
+        mouse = pos;
+        player.angle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
         const centerX = getCenterX();
         const centerY = getCenterY();
         if (!gameStarted) {
