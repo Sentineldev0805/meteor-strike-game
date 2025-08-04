@@ -501,8 +501,6 @@ window.onload = function() {
                 // Restart enemy spawn and animation loop
                 startEnemySpawn();
                 running = true;
-                // Draw first frame instantly
-                draw();
                 requestAnimationFrame(loop);
             }
             return;
@@ -521,6 +519,7 @@ window.onload = function() {
     // Use a flag to prevent multiple rapid touches from freezing the game
     let lastTouch = 0;
     canvas.addEventListener('touchstart', function(e) {
+        // Ensure preventDefault is called immediately
         e.preventDefault();
         const now = Date.now();
         if (now - lastTouch < 80) return; // throttle touch events
@@ -556,8 +555,6 @@ window.onload = function() {
                 // Restart enemy spawn and animation loop
                 startEnemySpawn();
                 running = true;
-                // Draw first frame instantly
-                draw();
                 requestAnimationFrame(loop);
             }
             return;
