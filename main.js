@@ -457,7 +457,17 @@ window.onload = function() {
                 pos.x > btnX && pos.x < btnX + btnW &&
                 pos.y > btnY && pos.y < btnY + btnH
             ) {
+                // Reset all game state immediately
                 gameStarted = true;
+                gameOver = false;
+                score = 0;
+                projectiles = [];
+                enemies = [];
+                particles = [];
+                // Restart enemy spawn and animation loop
+                startEnemySpawn();
+                running = true;
+                requestAnimationFrame(loop);
             }
             return;
         }
@@ -492,7 +502,17 @@ window.onload = function() {
                 pos.x > btnX && pos.x < btnX + btnW &&
                 pos.y > btnY && pos.y < btnY + btnH
             ) {
+                // Reset all game state immediately
                 gameStarted = true;
+                gameOver = false;
+                score = 0;
+                projectiles = [];
+                enemies = [];
+                particles = [];
+                // Restart enemy spawn and animation loop
+                startEnemySpawn();
+                running = true;
+                requestAnimationFrame(loop);
             }
             return;
         }
