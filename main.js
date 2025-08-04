@@ -555,7 +555,8 @@ window.onload = function() {
                 // Restart enemy spawn and animation loop
                 startEnemySpawn();
                 running = true;
-                requestAnimationFrame(loop);
+                // Use setTimeout to let tap event finish before starting animation (Safari fix)
+                setTimeout(() => requestAnimationFrame(loop), 0);
             }
             return;
         }
