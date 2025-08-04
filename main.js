@@ -21,10 +21,14 @@ window.onload = function() {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     // Player state
+    // Detect if on mobile device
+    function isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
     let player = {
         x: 0,
         y: 0,
-        r: 32,
+        r: isMobile() ? 22 : 32, // smaller on mobile
         angle: 0 // direction the triangle points (radians)
     };
     // Mouse/touch position for aiming
